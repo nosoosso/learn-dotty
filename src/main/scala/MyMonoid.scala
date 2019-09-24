@@ -3,7 +3,7 @@ object MyMonoid {
     println(1 combine 2)
     println(sum(List(1,2,3,4,5)))
     println(unsafeSum(List(1,2,3,4,5)))
-    println(unsafeSum(List[Int]()))
+    println(unsafeSum(List[Int]())) // fail
   }
 }
 
@@ -16,14 +16,14 @@ trait Monoid[T] extends SemiGroup[T] {
 }
 
 object SemiGroup {
-  def apply[T] given SemiGroup[T] = the[SemiGroup[T]]
+  def apply[T](given SemiGroup[T]) = summon[SemiGroup[T]]
 }
 
 object Monoid {
-  def apply[T] given Monoid[T] = the[Monoid[T]]
+  def apply[T](given Monoid[T]) = summon[Monoid[T]]
 }
 
-delegate for Monoid[Int] {
+given Monoid[Int] {
   def (x: Int) combine (y: Int): Int = x + y
   def unit: Int = 0
 }
